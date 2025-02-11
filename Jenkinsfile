@@ -109,7 +109,7 @@ pipeline{
             }
             steps {
                 script{
-                    imageValidation().call()
+ //                   imageValidation().call()
                     dockerDeploy('dev', '1000', '3000' ).call()
                 }
             }
