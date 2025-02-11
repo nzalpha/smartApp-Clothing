@@ -1,5 +1,5 @@
 FROM node:14
-ARG SRC_DIR=/opt/i27
+ARG SRC_DIR=/opt/aadil
 
 # Create directory inside the container
 RUN mkdir $SRC_DIR
@@ -7,7 +7,7 @@ RUN mkdir $SRC_DIR
 # Set the working directory inside the container
 WORKDIR $SRC_DIR
 
-# Copy the current content to /opt/i27 directory, this is our home directory
+# Copy the current content to /opt/aadil directory, this is our home directory
 COPY . $SRC_DIR
 
 # Install Node.js dependencies
@@ -16,7 +16,7 @@ RUN npm install
 # Expose the port
 EXPOSE 3000
 
-# Copy the entrypoint script
+# Copy the entrypoint script. Script to start the application with different environments
 COPY entrypoint.sh /entrypoint.sh
 
 # Make the script executable

@@ -6,10 +6,6 @@ case "$ENVIRONMENT" in
         echo "Starting the application in dev mode"
         npm run start:dev
         ;;
-    test)
-        echo "Starting the application in test mode"
-        npm run start:test
-        ;;
     stage)
         echo "Starting the application in stage mode"
         npm run start:stage
@@ -19,7 +15,7 @@ case "$ENVIRONMENT" in
         npm run start:prod
         ;;
     *)
-        echo "Invalid environment specified, Valid options are 'dev', 'test', 'prod'"
+        echo "Invalid environment specified, Valid options are 'dev', 'stg', 'prod'"
         exit 1
         ;;
 esac
