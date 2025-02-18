@@ -64,13 +64,10 @@ pipeline{
                 }
             }
             steps {
+
                 script{
-                sh 'ls -al'
-                sh 'pwd' 
-                }
-                // script{
                 //     imageValidation().call()
-                //     dockerBuildandPush().call()
+                     dockerBuildandPush().call()
                 //     dockerDeploy('dev', '1000', '3000' ).call()
                 // }
             }
@@ -170,9 +167,10 @@ def buildApp(){
 
 def dockerBuildandPush(){
     return{
-        // echo "Starting Docker Build "
-        // echo "Copy the jar to the folder where Docker file is present"
-        // sh "cp ${WORKSPACE}/target/i27-${env.Application_Name}-${env.Pom_Version}.${env.Pom_Packaging} ./.cicd/"
+         echo "Starting Docker Build "
+         echo "Copy the jar to the folder where Docker file is present"
+        sh "cp -r ${WORKSPACE}/* ./.cicd"
+        sh "ls -la ./.cicd"
         echo "********************* Building Docker Image ********************"
         sh "docker build --force-rm  --no-cache --build-arg   -t ${env.Docker_Hub}/${env.Application_Name}:${GIT_COMMIT} ./.cicd"
         echo "********************* Login to Docker Repo ********************"
