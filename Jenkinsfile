@@ -65,8 +65,8 @@ pipeline{
             }
             steps {
                 script{
-                sh ls -al
-                sh pwd 
+                sh 'ls -al'
+                sh 'pwd' 
                 }
                 // script{
                 //     imageValidation().call()
