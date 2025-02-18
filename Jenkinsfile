@@ -64,9 +64,10 @@ pipeline{
                 }
             }
             steps {
-
+                script{
                 sh ls -al
                 sh pwd 
+                }
                 // script{
                 //     imageValidation().call()
                 //     dockerBuildandPush().call()
