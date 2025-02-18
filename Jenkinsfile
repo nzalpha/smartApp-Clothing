@@ -69,7 +69,7 @@ pipeline{
                 //     imageValidation().call()
                      dockerBuildandPush().call()
                 //     dockerDeploy('dev', '1000', '3000' ).call()
-                // }
+                }
             }
         }
 
