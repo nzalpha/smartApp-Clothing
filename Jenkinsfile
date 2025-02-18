@@ -172,7 +172,7 @@ def dockerBuildandPush(){
         sh "cp -r ${WORKSPACE}/* ./.cicd"
         sh "ls -la ./.cicd"
         echo "********************* Building Docker Image ********************"
-        sh "docker build --force-rm  --no-cache --build-arg   -t ${env.Docker_Hub}/${env.Application_Name}:${GIT_COMMIT} ./.cicd"
+        sh "docker build --force-rm  --no-cache  -t ${env.Docker_Hub}/${env.Application_Name}:${GIT_COMMIT} ./.cicd"
         echo "********************* Login to Docker Repo ********************"
         sh "docker login -u ${Docker_Creds_USR} -p ${Docker_Creds_PSW}"
         echo "********************* Docker Push ********************"
