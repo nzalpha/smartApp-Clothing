@@ -66,15 +66,14 @@ pipeline{
             steps {
 
                 script{
-                //     imageValidation().call()
-                     dockerBuildandPush().call()
-                //     dockerDeploy('dev', '1000', '3000' ).call()
+                  imageValidation().call()
+                  dockerDeploy('dev', '1000', '3000' ).call()
                 }
             }
         }
 
         stage ("Deploy to Stage"){
-          when {
+        when {
                 anyOf{
                     expression {
                         params.deployToStg == "yes"
@@ -82,9 +81,10 @@ pipeline{
                 }
             }
             steps {
+
                 script{
-                    imageValidation().call()
-                    dockerDeploy('stg', '2000', '3000' ).call()
+                  imageValidation().call()
+                  dockerDeploy('stg', '2000', '3000' ).call()
                 }
             }
         }
@@ -110,8 +110,8 @@ pipeline{
                     timeout(time:300, unit: 'SECONDS'){
                     input message: "Deploying to ${env.Application_Name} to Prod", ok: 'yes', submitter: 'jack'
                     }
-                    imageValidation().call()
-                    dockerDeploy('prd', '3000', '3000' ).call()
+                   imageValidation().call()
+                  dockerDeploy('prod', '3000', '3000' ).call()
                 }
             }
         }       
@@ -150,20 +150,38 @@ def imageValidation(){
         }
         catch (Exception e){
             println("Docker image with this tag doesnt exist, so creating the image")
-            buildApp().call()
+            
             dockerBuildandPush().call()
         }
     }
 }
 
-def buildApp(){
-    return {
-        echo "Building ${env.Application_Name} Application"
-        // build using maven
-        sh 'mvn clean package -DskipTests=true'
-        archiveArtifacts artifacts: 'target/*.jar'
-    }
-}
+
+
+ def dockerDeploy(envDeploy, hostPort, contPort){
+     return {
+        // for every env, what will change: Application Name, HostPort, ContainerPort, Container Name, Environment Name
+            echo "*************************  Deploy to ${envDeploy}  *****************************"
+            script{
+            sh "docker pull  ${env.Docker_Hub}/${env.Application_Name}:${GIT_COMMIT}"
+            try{
+               //Stop the container
+                sh "docker stop ${env.Application_Name}-${envDeploy}"
+                //remove the container
+                sh "docker rm ${env.Application_Name}-${envDeploy}"
+            } catch(err){
+                echo "Error Caught: $err"
+              }
+            // create the container
+            echo "*************************  Running the  ${envDeploy} Container  *****************************"
+            sh "docker run -d -p ${hostPort}:${contPort} --name ${env.Application_Name}-${envDeploy} ${env.Docker_Hub}/${env.Application_Name}:${GIT_COMMIT}"
+            }
+     }
+ }
+
+
+
+
 
 def dockerBuildandPush(){
     return{
