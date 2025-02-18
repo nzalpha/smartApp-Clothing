@@ -121,27 +121,6 @@ pipeline{
 
 // Create a Method to Deploy our application into various environments
 
- def dockerDeploy(envDeploy, hostPort, contPort){
-     return {
-        // for every env, what will change: Application Name, HostPort, ContainerPort, Container Name, Environment Name
-            echo "*************************  Deploy to ${envDeploy}  *****************************"
-            script{
-            sh "docker pull  ${env.Docker_Hub}/${env.Application_Name}:${GIT_COMMIT}"
-            try{
-               //Stop the container
-                sh "docker stop ${env.Application_Name}-${envDeploy}"
-                //remove the container
-                sh "docker rm ${env.Application_Name}-${envDeploy}"
-            } catch(err){
-                echo "Error Caught: $err"
-              }
-            // create the container
-            echo "*************************  Running the  ${envDeploy} Container  *****************************"
-            sh "docker run -d -p ${hostPort}:${contPort} --name ${env.Application_Name}-${envDeploy} ${env.Docker_Hub}/${env.Application_Name}:${GIT_COMMIT}"
-            }
-     }
- }
-
 def imageValidation(){
     return{
         println ("Pulling the docker image")
